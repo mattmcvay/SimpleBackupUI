@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SimpleBackupUI.Models.DriveModel>
+
+@{
+    ViewBag.Title = "LoadDirectories";
+}
+
+<h4>Available Drives</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DriveType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DriveFormat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableFreeSpace)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalSize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VolumeLabel)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DriveType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DriveFormat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AvailableFreeSpace)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VolumeLabel)
+        </td>
+
+    </tr>
+}
+
+</table>
