@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SimpleBackupUI.Models.DirectoryModel>
+
+@{
+    ViewBag.Title = "LoadCurrentSourceAndDestination";
+}
+
+<h4>Current Settings</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Source)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Destination)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Source)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Destination)
+        </td>
+        
+    </tr>
+}
+
+</table>

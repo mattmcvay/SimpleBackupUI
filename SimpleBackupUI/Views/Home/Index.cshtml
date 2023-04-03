@@ -3,5 +3,31 @@
     ViewBag.Title = "Index";
 }
 
-<h2>SimpleBackup</h2>
 
+    <body>
+        <section class="container">
+            <form id="myForm">
+                @{ Html.RenderAction("LoadCurrentSourceAndDestination", "Home");}
+                <br />
+                <div class="msg" />
+                <div>
+                    <label for="source">New Source:</label>
+                    <input type="text" id="source">
+                </div>
+                <br />
+                <div>
+                    <label for="destination">New Destination:</label>
+                    <input type="text" id="destination">
+                </div>
+                <br />
+                <input class="btn" type="submit" value="Save" id="saveBTN">
+                <br />
+                <br />
+                <br />
+                @{ Html.RenderAction("LoadDirectories", "Home");}
+            </form>
+
+        </section>
+
+        <script src="~/Scripts/custom.js" type="text/javascript"></script>
+    </body>
