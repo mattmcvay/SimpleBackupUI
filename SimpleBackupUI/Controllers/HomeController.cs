@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using SimpleBackupUI.Models;
 using SimpleBackupUI.Logic;
+using System.Threading;
 
 namespace SimpleBackupUI.Controllers
 {
@@ -61,17 +62,16 @@ namespace SimpleBackupUI.Controllers
 
         public ActionResult UpdateSourceAndDestination(DirectoryModel directory)
         {
-
             var newSource = directory.Source;
             var newDestination = directory.Destination;
 
             DatabaseLogic logic = new DatabaseLogic();
-            logic.UpdateSource(newSource);
 
-            logic.UpdateDestination(newDestination);
+            logic.UpdateSourceAndDestination(newSource, newDestination);
 
-            return View("/Index.cshtml");
-            //return RedirectToAction("Index", "Home");
+            Thread.Sleep(1000);
+            //return View("/Index.cshtml");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

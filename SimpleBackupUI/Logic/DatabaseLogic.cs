@@ -4,13 +4,14 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web;
+
 
 namespace SimpleBackupUI.Logic
 {
     public class DatabaseLogic
     {
-
         public class GetConnection
         {
             public static Tuple<string, string> getCurrentSettings()
@@ -29,29 +30,34 @@ namespace SimpleBackupUI.Logic
                 return Tuple.Create(source, destination);
             }
         }
-
-        public void UpdateSource(string newSource)
+        public void UpdateSourceAndDestination([Optional] string newSource, [Optional] string newDestination)
         {
             var ConString = ConfigurationManager.ConnectionStrings["BackupConn"].ConnectionString;
             SqlConnection con = new SqlConnection(ConString);
-            string query = $"update Simplebackup set SourceDir = '{newSource}'";
+
+            string query = " ";
+
+            if (string.IsNullOrEmpty(newSource) && !string.IsNullOrEmpty(newDestination))
+            {
+                query = $"update Simplebackup set Destination = '{newDestination}'";
+            }
+            else if (string.IsNullOrEmpty(newDestination) && !string.IsNullOrEmpty(newSource))
+            {
+                query = $"update Simplebackup set SourceDir = '{newSource}'";
+            }
+            else if (!string.IsNullOrEmpty(newSource) && !string.IsNullOrEmpty(newDestination))
+            {
+                query = $"update Simplebackup set Destination = '{newDestination}', SourceDir = '{newSource}'";
+            }
+            else if (string.IsNullOrEmpty(newDestination) && string.IsNullOrEmpty(newDestination))
+            {
+                return;
+            }
+
             con.Open();
             SqlCommand cmd = new SqlCommand(query, con);
 
             cmd.ExecuteNonQuery();
         }
-
-        public void UpdateDestination(string newDestination)
-        {
-            var ConString = ConfigurationManager.ConnectionStrings["BackupConn"].ConnectionString;
-            SqlConnection con = new SqlConnection(ConString);
-            string query = $"update Simplebackup set Destination = '{newDestination}'";
-            con.Open();
-            SqlCommand cmd = new SqlCommand(query, con);
-
-            cmd.ExecuteNonQuery();
-
-        }
-
     }
 }
