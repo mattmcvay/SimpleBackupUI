@@ -1,11 +1,7 @@
 ﻿
-
 const saveButton = document.getElementById('saveBTN');
 
-
-
 saveButton.addEventListener('click', showClickedMessage);
-
 
 function showClickedMessage(e) {  // Always pass in E
     //e.preventDefault();
@@ -18,7 +14,5 @@ function showClickedMessage(e) {  // Always pass in E
         type: 'POST',
         data: myData, 
         url: '/Home/UpdateSourceAndDestination',
-    });
-
-   
+    }); 
 }
