@@ -27,15 +27,18 @@ namespace SimpleBackupUI.Controllers
             {
                 if (d.IsReady == true)
                 {
+                    var convertedFreeSpace = FormatBytesToHumanReadable(d.AvailableFreeSpace);
+                    var convertedTotalSize = FormatBytesToHumanReadable(d.TotalSize);
+
                     driveList.Add(new DriveModel
                     {
                         Name = d.Name,
                         DriveType = d.DriveType.ToString(),
                         DriveFormat = d.DriveFormat,
-                        AvailableFreeSpace = d.AvailableFreeSpace.ToString(),
-                        TotalSize = d.TotalSize.ToString(),                    
+                        AvailableFreeSpace = convertedFreeSpace.ToString(),
+                        TotalSize = convertedTotalSize.ToString(),
                         VolumeLabel = d.VolumeLabel.ToString()
-                    });
+                    }); 
                 }
 
             }
@@ -72,6 +75,20 @@ namespace SimpleBackupUI.Controllers
             Thread.Sleep(1000);
             //return View("/Index.cshtml");
             return RedirectToAction("Index", "Home");
+        }
+
+        private static string FormatBytesToHumanReadable(long bytes)
+        {
+            if (bytes > 1073741824)
+                return Math.Ceiling(bytes / 1073741824M).ToString("#,### GB");
+            else if (bytes > 1048576)
+                return Math.Ceiling(bytes / 1048576M).ToString("#,### MB");
+            else if (bytes >= 1)
+                return Math.Ceiling(bytes / 1024M).ToString("#,### KB");
+            else if (bytes < 0)
+                return "";
+            else
+                return bytes.ToString("#,### B");
         }
     }
 }
