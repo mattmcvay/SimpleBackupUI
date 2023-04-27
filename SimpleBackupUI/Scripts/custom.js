@@ -19,5 +19,32 @@ function showClickedMessage(e) {  // Always pass in E
 }
 
 
+function myFunction() {
+        // Get the checkbox
+        var checkBox = document.getElementById("myCheck");
+        // Get the output text
+        var checkBoxText = document.getElementById("checkBoxText");
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+    checkBoxText.innerText = "Service status: On";
+            var checkBoxValue = 'On';
+        }
+        else if (checkBox.checked == false) {
+    checkBoxText.innerText = "Service status: Off";
+            checkBoxValue = "Off"
+        }
+        console.log(checkBoxValue);
+
+        var currentStatus = {ServiceStatus: checkBoxValue }
+
+        $.ajax({
+    type: 'POST',
+            data: currentStatus,
+            url: '/Home/UpdateServceStatus',
+        });
+    }
+  
+
+
 
 
