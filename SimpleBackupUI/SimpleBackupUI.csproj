@@ -109,13 +109,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BackupLogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\DatabaseLogic.cs" />
+    <Compile Include="Models\BackupLogModel.cs" />
     <Compile Include="Models\DirectoryModel.cs" />
     <Compile Include="Models\DriveModel.cs" />
+    <Compile Include="Models\IsServiceRunningModel.cs" />
+    <Compile Include="Models\ServiceStatusModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +140,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Home\LoadDirectories.cshtml" />
     <Content Include="Views\Home\LoadCurrentSourceAndDestination.cshtml" />
+    <Content Include="Views\BackupLog\BackupLog.cshtml" />
+    <Content Include="Views\Home\LoadServiceStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

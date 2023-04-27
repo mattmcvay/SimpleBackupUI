@@ -1,0 +1,9 @@
+﻿@model SimpleBackupUI.Models.IsServiceRunningModel
+
+@{
+    ViewBag.Title = "LoadServiceStatus";
+}
+
+<p id="checkBoxText" style="display:block">Service status: @Model.Status</p>
+<input type="checkbox" id="myCheck" checked="@Model.IsServiceRunning" onclick="myFunction()">
+
