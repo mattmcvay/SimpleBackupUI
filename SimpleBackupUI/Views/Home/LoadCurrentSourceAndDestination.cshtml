@@ -1,32 +1,66 @@
 ﻿@model IEnumerable<SimpleBackupUI.Models.DirectoryModel>
 
-@{
+ @{
     ViewBag.Title = "LoadCurrentSourceAndDestination";
-}
+  }
 
-<h4>Current Settings</h4>
+    <h4>Current Settings</h4>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Source)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Destination)
-        </th>
-        <th></th>
-    </tr>
+    <div>
+        @{ Html.RenderAction("LoadServiceStatus", "Home");}
+    </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Source)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Destination)
-        </td>
-        
-    </tr>
-}
+    <br />
 
-</table>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Source)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Destination)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Source)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    <script>
+        function myFunction() {
+            // Get the checkbox
+            var checkBox = document.getElementById("myCheck");
+            // Get the output text
+            var checkBoxText = document.getElementById("checkBoxText");
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true) {
+                checkBoxText.innerText = "Service status: On";
+                var checkBoxValue = 'On';
+            }
+            else if (checkBox.checked == false) {
+                checkBoxText.innerText = "Service status: Off";
+                checkBoxValue = "Off"
+            }
+            console.log(checkBoxValue);
+
+            var currentStatus = { ServiceStatus: checkBoxValue }
+
+            $.ajax({
+                type: 'POST',
+                data: currentStatus,
+                url: '/Home/UpdateServceStatus',
+            });
+        }
+    </script>

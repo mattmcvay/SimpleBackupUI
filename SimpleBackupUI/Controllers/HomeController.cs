@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using SimpleBackupUI.Models;
 using SimpleBackupUI.Logic;
 using System.Threading;
+using System.Diagnostics;
 
 namespace SimpleBackupUI.Controllers
 {
@@ -14,10 +15,9 @@ namespace SimpleBackupUI.Controllers
     {
         // GET: Home
         public ActionResult Index()
-        {
+        {        
             return View();
         }
-
         public ActionResult LoadDirectories()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
@@ -89,6 +89,53 @@ namespace SimpleBackupUI.Controllers
                 return "";
             else
                 return bytes.ToString("#,### B");
+        }
+
+        public ActionResult UpdateServceStatus(ServiceStatusModel status)
+        {
+            DatabaseLogic updateService = new DatabaseLogic();
+            
+            updateService.SetServiceStatusTo(status.ServiceStatus.ToString());
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult LoadServiceStatus()
+        {
+            // new code, may not use.
+            string serviceName = "SimpleBackupService"; // the name of the service you want to check
+            string arguments = "query " + serviceName;
+
+            Process process = new Process();
+            process.StartInfo.FileName = "sc.exe";
+            process.StartInfo.Arguments = arguments;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            bool isServiceRunning = output.Contains("STATE              : 4  RUNNING");
+
+            string status = string.Empty;
+
+            if(isServiceRunning == true)
+            {
+                status = "On";
+            }
+            else if(isServiceRunning == false)
+            {
+                status = "Off";
+            }
+
+            IsServiceRunningModel model = new IsServiceRunningModel()
+            {
+               IsServiceRunning = isServiceRunning,
+               Status = status
+            };
+
+            return View(model);
         }
     }
 }

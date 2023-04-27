@@ -12,5 +12,6 @@ namespace SimpleBackupUI.Models
 
         [Display(Name = "Backup Location")]
         public string Destination { get; set; }
+
     }
 }
