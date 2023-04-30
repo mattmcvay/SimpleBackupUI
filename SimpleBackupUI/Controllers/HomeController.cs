@@ -48,7 +48,8 @@ namespace SimpleBackupUI.Controllers
 
         public ActionResult LoadCurrentSourceAndDestination()
         {
-            Tuple<string, string> con = DatabaseLogic.GetConnection.getCurrentSettings();
+            DatabaseLogic logic = new DatabaseLogic();
+            Tuple<string, string> con = logic.getCurrentSettings();
             string sourceDir = con.Item1;
             string destination = con.Item2;
 
@@ -102,8 +103,8 @@ namespace SimpleBackupUI.Controllers
 
         public ActionResult LoadServiceStatus()
         {
-            // new code, may not use.
-            string serviceName = "SimpleBackupService"; // the name of the service you want to check
+           
+            string serviceName = "SimpleBackupService"; 
             string arguments = "query " + serviceName;
 
             Process process = new Process();

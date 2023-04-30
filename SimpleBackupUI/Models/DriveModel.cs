@@ -7,8 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace SimpleBackupUI.Models
 {
     public class DriveModel
-    {
-        
+    {     
         public string Name { get; set; }
 
         [Display(Name = "Drive Type")]
