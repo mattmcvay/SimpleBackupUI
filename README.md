@@ -10,3 +10,5 @@ This UI gives the user the ability to:
 
 Please install the SimpleBackup Service first, found here:
 https://github.com/mattmcvay/SimpleBackup
+
+For more info and screenshots, see the SimpleBackupUI Details.docx file.
