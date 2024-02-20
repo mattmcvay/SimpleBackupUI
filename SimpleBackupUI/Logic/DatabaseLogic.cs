@@ -19,21 +19,28 @@ namespace SimpleBackupUI.Logic
         {
             _connectionString = ConfigurationManager.ConnectionStrings["BackupConn"].ConnectionString;
         }
-        public Tuple<string, string> getCurrentSettings()
+        public List<(string, string, int)> getCurrentSettings()
         {
-            using(SqlConnection con = new SqlConnection(_connectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 string query = "select * from dbo.Simplebackup";
                 con.Open();
                 SqlCommand cmd = new SqlCommand(query, con);
                 DataTable dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
+                List<(string, string, int)> SourceAndDestination = new List<(string, string, int)>();
 
-                string source = dt.Rows[0]["SourceDir"].ToString();
-                string destination = dt.Rows[0]["Destination"].ToString();
-                return Tuple.Create(source, destination);
+                foreach (DataRow row in dt.Rows)
+                {
+                    string source = row["SourceDir"].ToString();
+                    string destination = row["Destination"].ToString();
+                    int id = (int)row["Id"];
+                    var pair = Tuple.Create(source, destination, id);
+                    SourceAndDestination.Add(pair.ToValueTuple());
+                }
+                return SourceAndDestination;
+
             }
-            
         }
         
         public void UpdateSourceAndDestination([Optional] string newSource, [Optional] string newDestination)
@@ -42,20 +49,35 @@ namespace SimpleBackupUI.Logic
 
             if (string.IsNullOrEmpty(newSource) && !string.IsNullOrEmpty(newDestination))
             {
-                query = $"update Simplebackup set Destination = '{newDestination}'";
+                return;
             }
             else if (string.IsNullOrEmpty(newDestination) && !string.IsNullOrEmpty(newSource))
             {
-                query = $"update Simplebackup set SourceDir = '{newSource}'";
+                return;
             }
-            else if (!string.IsNullOrEmpty(newSource) && !string.IsNullOrEmpty(newDestination))
-            {
-                query = $"update Simplebackup set Destination = '{newDestination}', SourceDir = '{newSource}'";
-            }
-            else if (string.IsNullOrEmpty(newDestination) && string.IsNullOrEmpty(newDestination))
+            else if (string.IsNullOrEmpty(newSource) && string.IsNullOrEmpty(newDestination))
             {
                 return;
             }
+            else if (!string.IsNullOrEmpty(newDestination) && !string.IsNullOrEmpty(newDestination))
+            {
+                query = $"Insert into dbo.Simplebackup (SourceDir, Destination) values('{newSource}', '{newDestination}')"; ;
+            }
+        
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.ExecuteNonQuery();
+            }
+
+        }
+
+        public void DeleteSourceAndDestination(int id)
+        {
+            string query = $"Delete from dbo.Simplebackup where id = '{id}'";
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {

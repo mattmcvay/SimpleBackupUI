@@ -8,6 +8,7 @@ using SimpleBackupUI.Models;
 using SimpleBackupUI.Logic;
 using System.Threading;
 using System.Diagnostics;
+using System.Deployment.Internal;
 
 namespace SimpleBackupUI.Controllers
 {
@@ -49,17 +50,23 @@ namespace SimpleBackupUI.Controllers
         public ActionResult LoadCurrentSourceAndDestination()
         {
             DatabaseLogic logic = new DatabaseLogic();
-            Tuple<string, string> con = logic.getCurrentSettings();
-            string sourceDir = con.Item1;
-            string destination = con.Item2;
+            List<(string, string, int)> con = logic.getCurrentSettings();
 
             List<DirectoryModel> directories = new List<DirectoryModel>();
 
-            directories.Add(new DirectoryModel
+            foreach (var item in con)
             {
-                Source = sourceDir,
-                Destination = destination
-            });
+                string sourceDir = item.Item1;
+                string destination = item.Item2;
+                int id = item.Item3;
+
+                directories.Add(new DirectoryModel
+                {
+                    Source = sourceDir,
+                    Destination = destination,
+                    Id = id
+                }); 
+            }
 
             return View(directories);
         }
@@ -72,6 +79,16 @@ namespace SimpleBackupUI.Controllers
             DatabaseLogic logic = new DatabaseLogic();
 
             logic.UpdateSourceAndDestination(newSource, newDestination);
+
+            Thread.Sleep(1000);
+            //return View("/Index.cshtml");
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult DeleteBackupLocation(int id)
+        {
+            DatabaseLogic logic = new DatabaseLogic();
+            logic.DeleteSourceAndDestination(id);
 
             Thread.Sleep(1000);
             //return View("/Index.cshtml");

@@ -8,10 +8,13 @@ namespace SimpleBackupUI.Models
 {
     public class DirectoryModel
     {
+        public int Id { get; set; }
         public string Source { get; set; }
 
         [Display(Name = "Backup Location")]
         public string Destination { get; set; }
+
+       
 
     }
 }
